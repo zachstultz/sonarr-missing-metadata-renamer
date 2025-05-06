@@ -1,2 +1,1 @@
-# sonarr-missing-metadata-renamer
-Adds missing video metadata info to a downloaded files' name to fix a stalled sonarr upgrade import.
+This is a personal backup. There will be no support.
