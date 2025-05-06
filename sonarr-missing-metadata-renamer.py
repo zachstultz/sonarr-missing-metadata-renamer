@@ -6,6 +6,7 @@ import time
 from genericpath import isfile
 from pymediainfo import MediaInfo
 
+# The download path for a completed file must contain the word "complete"
 # python3 -m pip install --upgrade pip setuptools wheel
 # sudo apt install python3-pip -y && sudo apt-get install -y libmediainfo-dev && pip3 install pymediainfo
 
@@ -13,6 +14,19 @@ ROOT_DIR = os.path.dirname(os.path.realpath(__file__))
 path = ""
 file_path_passed = ""
 ignored_folder_names = []
+
+# Whether to move the file to a new folder or not
+move_to_folder = True
+
+# How long to wait before renaming the file in minutes
+# This is to make sure only stalled upgrade files are renamed.
+required_wait_time = 20
+
+# The maximum time to wait before renaming the file in minutes.
+max_wait_time = 60
+
+# The accepted file extensions
+allowed_extensions = [".mkv", ".mp4"]
 
 
 parser = argparse.ArgumentParser(
@@ -149,12 +163,6 @@ def remove_hidden_files(files, root):
 # Retrieves the file extension on the passed file
 def get_file_extension(file):
     return os.path.splitext(file)[1]
-
-
-move_to_folder = True
-required_wait_time = 20
-max_wait_time = 60
-allowed_extensions = [".mkv", ".mp4"]
 
 
 print("Starting...\n")
