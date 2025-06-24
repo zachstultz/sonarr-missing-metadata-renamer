@@ -36,5 +36,5 @@ RUN rm -rf /var/lib/apt/lists/*
 # Switch to "appuser"
 USER appuser
 
-# Run the addon script in the background and redirect the output to a log file, then run the main script in the foreground.
+# Run the main script.
 CMD python3 -u sonarr_missing_metadata_renamer.py --path="$PATH_TO_DIR"
