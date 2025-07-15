@@ -425,7 +425,7 @@ for root, dirs, files in os.walk(path, topdown=True):
                         rename = rename.replace("_", " ")
 
                         # replace all punctuation with spaces
-                        rename = re.sub(r"[^\w\s]", " ", rename)
+                        rename = re.sub(r"[^\w\s\[\]\(\)\{\}-]", " ", rename)
 
                         # remove multiple spaces
                         rename = re.sub(" +", " ", rename).strip()
