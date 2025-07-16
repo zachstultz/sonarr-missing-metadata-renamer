@@ -170,7 +170,13 @@ if not path and file_path_passed:
     path = os.path.dirname(file_path_passed)
 
 for root, dirs, files in os.walk(path, topdown=True):
+    # Avoid folders outside of the complete folder
     if "/complete" not in root:
+        continue
+
+    # Avoid renaming individual files without a folder
+    # otherwise sonarr won't find it
+    if os.path.basename(root) in ["torrents", "usenet"]:
         continue
 
     base_name = os.path.basename(root)
