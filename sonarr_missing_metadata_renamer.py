@@ -96,8 +96,8 @@ def get_metadata(file):
     for track in media_info.tracks:
         if track.track_type == "Video" and not video_track:
             video_track = Video_Track(
-                str(track.height) + "p",
-                str(track.bit_depth) + "bit",
+                f"{track.height}p",
+                f"{track.bit_depth}bit",
                 track.commercial_name,
             )
         elif track.track_type == "Audio":
@@ -185,7 +185,7 @@ for root, dirs, files in os.walk(path, topdown=True):
     if base_name in ignored_folder_names:
         continue
 
-    print("\n" + root)
+    print(f"\n{root}")
 
     remove_ignored_folders(dirs)
     remove_underscores(dirs)
@@ -225,11 +225,7 @@ for root, dirs, files in os.walk(path, topdown=True):
                 print(f"\tcreation time: {creation_time}")
                 print(f"\tmodification time: {modification_time}")
                 print(
-                    "\t"
-                    + file
-                    + " is too young, please wait until "
-                    + str(required_wait_time)
-                    + " minutes."
+                    f"\t{file} is too young, please wait until {required_wait_time} minutes."
                 )
                 continue
 
@@ -246,7 +242,7 @@ for root, dirs, files in os.walk(path, topdown=True):
                 file_extension = os.path.splitext(file_name)[1]
                 file_name_no_extension = os.path.splitext(file_name)[0]
 
-                print("\t" + file_name)
+                print(f"\t{file_name}")
                 metadata = get_metadata(file_path)
                 rename = file_name_no_extension
 
@@ -265,7 +261,7 @@ for root, dirs, files in os.walk(path, topdown=True):
 
                     # Search and add video codec
                     if not re.search(metadata.video_track.codec, rename, re.IGNORECASE):
-                        print("\t\tVideo Codec: " + metadata.video_track.codec)
+                        print(f"\t\tVideo Codec: {metadata.video_track.codec}")
                         if metadata.video_track.codec in [
                             "HEVC",
                             "H.265",
@@ -282,14 +278,14 @@ for root, dirs, files in os.walk(path, topdown=True):
                             codec_regex = re.escape(metadata.video_track.codec)
 
                         if not re.search(codec_regex, file_name, re.IGNORECASE):
-                            add += " " + metadata.video_track.codec
+                            add += f" {metadata.video_track.codec}"
 
                     # Search and add video resolution
                     if not re.search(
                         metadata.video_track.resolution, rename, re.IGNORECASE
                     ):
                         print(
-                            "\t\tVideo Resolution: " + metadata.video_track.resolution
+                            f"\t\tVideo Resolution: {metadata.video_track.resolution}"
                         )
                         if metadata.video_track.resolution in [
                             "480p",
@@ -305,24 +301,24 @@ for root, dirs, files in os.walk(path, topdown=True):
                                 file_name,
                                 re.IGNORECASE,
                             ):
-                                add += " " + metadata.video_track.resolution
+                                add += f" {metadata.video_track.resolution}"
                         else:
-                            add += " " + metadata.video_track.resolution
+                            add += f" {metadata.video_track.resolution}"
 
                     # Search and add video bit depth
                     if not re.search(
                         metadata.video_track.bit_depth, rename, re.IGNORECASE
                     ):
-                        print("\t\tVideo Bit Depth: " + metadata.video_track.bit_depth)
+                        print(f"\t\tVideo Bit Depth: {metadata.video_track.bit_depth}")
                         if metadata.video_track.bit_depth in ["8bit", "10bit"]:
                             if not re.search(
                                 r"(\b(8|10)[-_. ]?bit\b)",
                                 file_name,
                                 re.IGNORECASE,
                             ):
-                                add += " " + metadata.video_track.bit_depth
+                                add += f" {metadata.video_track.bit_depth}"
                         else:
-                            add += " " + metadata.video_track.bit_depth
+                            add += f" {metadata.video_track.bit_depth}"
 
                     audio_track_string = ""
                     audio_codecs = []
@@ -335,11 +331,11 @@ for root, dirs, files in os.walk(path, topdown=True):
                         if audio_track.language not in audio_languages:
                             audio_languages.append(audio_track.language)
                             if not audio_track_string:
-                                print("\t\tAudio Language: " + audio_track.language)
+                                print(f"\t\tAudio Language: {audio_track.language}")
                                 audio_track_string += audio_track.language
                             else:
-                                print("\t\tAudio Language: " + audio_track.language)
-                                audio_track_string += "+" + audio_track.language
+                                print(f"\t\tAudio Language: {audio_track.language}")
+                                audio_track_string += f"+{audio_track.language}"
 
                     excluded_languages = ["mul", "und", "zxx", "qaa", "mis", ""]
 
@@ -360,7 +356,7 @@ for root, dirs, files in os.walk(path, topdown=True):
                                 if not re.search(codec, rename, re.IGNORECASE)
                             ]
                         )
-                        print("\t\tAudio Codec: " + ", ".join(audio_codecs))
+                        print(f"\t\tAudio Codec: {', '.join(audio_codecs)}")
 
                     dual_audio_keyword_search = re.search(
                         r"(dual[ ._-]?(audio|dub|dubbed)|\sdual\s|EN\+JA|JA\+EN|\[eng?,?(\s+)?jpn?\]|\[jpn?,?(\s+)?eng?\])",
@@ -374,7 +370,7 @@ for root, dirs, files in os.walk(path, topdown=True):
                         )
                         and not dual_audio_keyword_search
                     ):
-                        print("\t\tAudio Languages Combined: " + audio_track_string)
+                        print(f"\t\tAudio Languages Combined: {audio_track_string}")
                         if (
                             re.search(
                                 r"(EN\+JA|JA\+EN)",
@@ -382,9 +378,9 @@ for root, dirs, files in os.walk(path, topdown=True):
                                 re.IGNORECASE,
                             )
                         ) and not dual_audio_keyword_search:
-                            add += " " + audio_track_string
+                            add += f" {audio_track_string}"
                         else:
-                            add += " " + audio_track_string
+                            add += f" {audio_track_string}"
 
                     # Add dual audio keyword if there are only two audio tracks
                     if len(audio_languages) < 3 and not dual_audio_keyword_search:
@@ -409,7 +405,7 @@ for root, dirs, files in os.walk(path, topdown=True):
                     if metadata.subtitle_tracks:
                         for track in metadata.subtitle_tracks:
                             if track.codec:
-                                print("\t\tSubtitle Codec: " + track.codec)
+                                print(f"\t\tSubtitle Codec: {track.codec}")
                             if track.codec == "PGS" and not re.search(
                                 r"\b(?:(Blu-?Ray|BDMux|BD(?!$))|(B[DR]Rip))(?:\b|$|[ .])",
                                 file_name,
@@ -421,7 +417,7 @@ for root, dirs, files in os.walk(path, topdown=True):
                     if blu_ray_keywords and not re.search(
                         blu_ray_keywords, file_name, re.IGNORECASE
                     ):
-                        add += " " + blu_ray_keywords
+                        add += f" {blu_ray_keywords}"
 
                     if add or "_" in rename:
                         # replace periods with spaces
@@ -437,8 +433,8 @@ for root, dirs, files in os.walk(path, topdown=True):
                         rename = re.sub(" +", " ", rename).strip()
 
                         if add:
-                            add = "[" + add.strip() + "]"
-                            rename += " " + add
+                            add = f"[{add.strip()}]"
+                            rename += f" {add}"
 
                         # add the extension
                         rename += file_extension
@@ -446,7 +442,7 @@ for root, dirs, files in os.walk(path, topdown=True):
                         # check that the new name is different from the old name
                         if rename.strip().lower() != file_name.strip().lower():
                             print("\tRenaming file")
-                            print("\t\tFROM: " + file_name + "\n\t\tTO:   " + rename)
+                            print(f"\t\tFROM: {file_name}\n\t\tTO:   {rename}")
 
                             rename_path = os.path.join(file_directory, rename)
                             os.rename(file_path, rename_path)
@@ -486,9 +482,9 @@ for root, dirs, files in os.walk(path, topdown=True):
                 else:
                     print("\t\tNo metadata")
             except Exception as e:
-                print("\t\tError: " + str(e))
+                print(f"\t\tError: {e}")
                 continue
         except Exception as e:
-            print("Error: " + str(e))
+            print(f"Error: {e}")
             continue
 print("\nFinished.")
