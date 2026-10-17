@@ -24,7 +24,7 @@ move_to_folder = True
 required_wait_time = 20
 
 # The maximum time to wait before renaming the file in minutes.
-max_wait_time = 60
+max_wait_time = 100
 
 # The accepted file extensions
 allowed_extensions = [".mkv", ".mp4"]
